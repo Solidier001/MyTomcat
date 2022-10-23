@@ -32,9 +32,9 @@ public class HttpServer1 {
                 InputStream input = socket.getInputStream();
                 OutputStream output = socket.getOutputStream();
             ) {
-                Request request=new Request(input);
+                Request request=new Request(input);//刷新Request
                 request.parse();
-                Response response=new Response(output);
+                Response response=new Response(output);//刷新Response
                 response.setRequest(request);
 //              check if this is a request for a static resource
 //              or for a servlet
