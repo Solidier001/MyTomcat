@@ -1,4 +1,4 @@
-package org.example.ex03.http.request;
+package org.example.ex03.http;
 
 import org.example.ex03.http.request.message.HttpHeader;
 import org.example.ex03.http.request.message.HttpRequestLine;
@@ -26,12 +26,15 @@ public class SocketInputStream {
         return line.toString();
     }
 
-    public HttpRequestLine readRequestLine() throws IOException {
+    public void readRequestLine(HttpRequestLine httpRequestLine) throws IOException {
         String[] line=readLine().split(" ");
         String method=line[0];
-        String url=line[1];
-        String httpVersion=line[2];
-        return new HttpRequestLine(url,method,httpVersion);
+        String uri=line[1];
+        String[] protocolVersion=line[2].split("/");
+        httpRequestLine.setProtocol(protocolVersion[0]);
+        httpRequestLine.setVersion(protocolVersion[1]);
+        httpRequestLine.setMethod(method);
+        httpRequestLine.setUri(uri);
     }
 
     public HttpHeader readHeader() throws IOException {

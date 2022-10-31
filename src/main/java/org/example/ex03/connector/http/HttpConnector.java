@@ -1,6 +1,6 @@
 package org.example.ex03.connector.http;
 
-import org.example.ex03.processsor.http.HttpProcessor;
+import org.example.ex03.processsor.impl.HttpProcessor;
 
 import java.io.IOException;
 import java.net.InetAddress;

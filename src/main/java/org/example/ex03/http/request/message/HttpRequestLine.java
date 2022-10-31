@@ -1,25 +1,27 @@
 package org.example.ex03.http.request.message;
 
 public class HttpRequestLine {
-    private String url;
+    private String uri;
     private String method;
-    private String httpVersion;
+    private String protocol;
+    private String version;
 
-    public HttpRequestLine(String url, String method, String httpVersion) {
-        this.url = url;
+    public HttpRequestLine(String uri, String method, String protocol, String version) {
+        this.uri = uri;
         this.method = method;
-        this.httpVersion = httpVersion;
+        this.protocol = protocol;
+        this.version = version;
     }
 
     public HttpRequestLine() {
     }
 
-    public String getUrl() {
-        return url;
+    public String getUri() {
+        return uri;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public String getMethod() {
@@ -30,11 +32,19 @@ public class HttpRequestLine {
         this.method = method;
     }
 
-    public String getHttpVersion() {
-        return httpVersion;
+    public String getProtocol() {
+        return protocol;
     }
 
-    public void setHttpVersion(String httpVersion) {
-        this.httpVersion = httpVersion;
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

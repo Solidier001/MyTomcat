@@ -1,5 +1,7 @@
 package org.example.ex03.http.request;
 
+import org.example.ex03.http.SocketInputStream;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.BufferedReader;
@@ -13,9 +15,39 @@ public class HttpRequest implements HttpServletRequest {
     protected HashMap<String,Object> headers=new HashMap<>();
     protected ArrayList<Cookie> cookies=new ArrayList();
     protected SocketInputStream input;
+    protected String queryString;
+    protected String requestedSessionId;
+    protected String requestURI;
+    protected String method;
+    protected String protocol;
+    protected boolean requestedSessionIdFromURL;
 
     public HttpRequest(SocketInputStream input) {
         this.input=input;
+    }
+
+    public void setQueryString(String queryString) {
+        this.queryString = queryString;
+    }
+
+    public void setRequestedSessionId(String requestedSessionId) {
+        this.requestedSessionId = requestedSessionId;
+    }
+
+    public void setRequestedSessionIdFromURL(boolean requestedSessionIdFromURL) {
+        this.requestedSessionIdFromURL = requestedSessionIdFromURL;
+    }
+
+    public void setRequestURI(String requestURI) {
+        this.requestURI = requestURI;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
     }
 
     @Override
@@ -55,7 +87,7 @@ public class HttpRequest implements HttpServletRequest {
 
     @Override
     public String getMethod() {
-        return null;
+        return method;
     }
 
     @Override
@@ -75,7 +107,7 @@ public class HttpRequest implements HttpServletRequest {
 
     @Override
     public String getQueryString() {
-        return null;
+        return queryString;
     }
 
     @Override
@@ -95,12 +127,12 @@ public class HttpRequest implements HttpServletRequest {
 
     @Override
     public String getRequestedSessionId() {
-        return null;
+        return requestedSessionId;
     }
 
     @Override
     public String getRequestURI() {
-        return null;
+        return requestURI;
     }
 
     @Override
@@ -140,7 +172,7 @@ public class HttpRequest implements HttpServletRequest {
 
     @Override
     public boolean isRequestedSessionIdFromURL() {
-        return false;
+        return requestedSessionIdFromURL;
     }
 
     @Override
@@ -240,7 +272,7 @@ public class HttpRequest implements HttpServletRequest {
 
     @Override
     public String getProtocol() {
-        return null;
+        return protocol;
     }
 
     @Override

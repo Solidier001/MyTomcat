@@ -2,18 +2,18 @@ package org.example.ex03.http.response;
 
 
 
+import org.example.ex02.Constants;
 import org.example.ex03.http.request.HttpRequest;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Collection;
 import java.util.Locale;
 
 public class HttpResponse implements HttpServletResponse {
+    private static final int BUFFER_SIZE = 1024;
     protected OutputStream output;
     protected HttpRequest request;
     protected PrintWriter writer;
@@ -213,5 +213,36 @@ public class HttpResponse implements HttpServletResponse {
     @Override
     public Locale getLocale() {
         return null;
+    }
+
+    public void sendStaticResource() throws IOException {
+        byte[] bytes = new byte[BUFFER_SIZE];
+        FileInputStream fis = null;
+        try {
+            File file = new File(Constants.WEB_ROOT, request.getRequestURI());
+            fis = new FileInputStream(file);
+            int ch = fis.read(bytes, 0, BUFFER_SIZE);
+            String message = "HTTP/1.1 200 OK\r\n" +
+                    "\r\n";
+            output.write(message.getBytes());
+            while (ch != -1) {
+                output.write(bytes, 0, ch);
+                ch = fis.read(bytes, 0, BUFFER_SIZE);
+            }
+            System.out.println("file found");
+        } catch (FileNotFoundException e) {
+            String errorMessage = "HTTP/1.1 404 File Not Found\r\n" +
+                    "Content-Type: text/html\r\n" +
+                    "Content-Length: 23\r\n" +
+                    "\r\n" +
+                    "<h1>File Not Found</h1>";
+            output.write(errorMessage.getBytes());
+            System.out.println("file not exists");
+            System.out.println(e.toString());
+        } finally {
+            if (fis != null) {
+                fis.close();
+            }
+        }
     }
 }
