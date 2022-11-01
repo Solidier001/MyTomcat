@@ -3,30 +3,48 @@ package org.example.ex03.http.request.message;
 import java.util.TreeMap;
 
 public class HttpHeader {
-    private String key;
+    private String name;
     private String value;
+    private int nameEnd;
+    private int valueEnd;
 
-    public HttpHeader(String key, String value) {
-        this.key = key;
+    public HttpHeader(String name, String value) {
+        this.name = name;
         this.value = value;
     }
 
     public HttpHeader() {
     }
 
-    public String getKey() {
-        return key;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public void setNameEnd(int nameEnd) {
+        this.nameEnd = nameEnd;
+    }
+
+    public void setValueEnd(int valueEnd) {
+        this.valueEnd = valueEnd;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getValue() {
         return value;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public int getNameEnd() {
+        return nameEnd;
+    }
+
+    public int getValueEnd() {
+        return valueEnd;
     }
 }

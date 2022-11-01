@@ -11,16 +11,20 @@ import java.net.URL;
  * Unit test for simple App.
  */
 public class AppTest {
+    private InputStreamReader inputStreamReader;
 
     @Test
-    public void shouldAnswerWithTrue(){
-        String uri="https://github.com/search?q=ssh+netty&type=Repositories";
-        int pos=uri.indexOf("://");
-        System.out.println(uri.charAt(pos));
-        System.out.println(uri.charAt(pos+3));
-        pos=uri.indexOf('/',pos+3);
-        System.out.println(uri.charAt(pos));
-        uri=uri.substring(pos);
-        System.out.println(uri);
+    public void shouldAnswerWithTrue() throws IOException {
+        System.out.println(new StringBuffer().toString().split(":"));
+    }
+
+    private String readLine() throws IOException {
+        char c;
+        int a;
+        StringBuffer line=new StringBuffer();
+        while ((a=inputStreamReader.read())>=0&&(c= (char) a)!='\n'){
+            line.append(c);
+        }
+        return line.toString();
     }
 }

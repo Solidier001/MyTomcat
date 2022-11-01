@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.LinkedList;
 
 public class HttpProcessor {
     private HttpRequest request;
@@ -108,6 +109,12 @@ public class HttpProcessor {
     }
 
     private void parseHeaders(SocketInputStream input) throws IOException, ServletException {
+        LinkedList<HttpHeader> httpHeaders=new LinkedList();
+        HttpHeader httpHeader=new HttpHeader();
+        while (input.readHeader(httpHeader)==1){
+            httpHeaders.add(httpHeader);
+            httpHeader=new HttpHeader();
+        }
     }
 
     private String normalize(String uri) {

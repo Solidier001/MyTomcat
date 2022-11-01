@@ -37,8 +37,19 @@ public class SocketInputStream {
         httpRequestLine.setUri(uri);
     }
 
-    public HttpHeader readHeader() throws IOException {
-        String[] header=readLine().split(":");
-        return new HttpHeader(header[0],header[1]);
+    public int readHeader(HttpHeader httpHeader) throws IOException {
+        String line=readLine();
+        if (!line.equals("")){
+            String[] header=line.split(":");
+            httpHeader.setName(header[0]);
+            httpHeader.setValue(header[1]);
+            return 1;
+        }
+        else return 0;
+    }
+
+    public void close() throws IOException {
+        inputStreamReader.close();
+        inputStream.close();
     }
 }
