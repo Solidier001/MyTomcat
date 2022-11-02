@@ -1,4 +1,4 @@
-package org.example.ex03.http.request.message;
+package org.example.ex03.connector.http;
 
 public class HttpRequestLine {
     private String uri;

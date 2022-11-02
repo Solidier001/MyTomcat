@@ -1,9 +1,8 @@
-package org.example.ex03.http.response;
+package org.example.ex03.connector.http;
 
 
 
 import org.example.ex02.Constants;
-import org.example.ex03.http.request.HttpRequest;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;

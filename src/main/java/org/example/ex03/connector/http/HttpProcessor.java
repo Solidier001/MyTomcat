@@ -1,13 +1,10 @@
-package org.example.ex03.processsor.impl;
+package org.example.ex03.connector.http;
 
-import org.example.ex03.connector.http.HttpConnector;
-import org.example.ex03.http.request.HttpRequest;
-import org.example.ex03.http.request.message.HttpHeader;
-import org.example.ex03.http.request.message.HttpRequestLine;
-import org.example.ex03.http.response.HttpResponse;
-import org.example.ex03.http.SocketInputStream;
+import org.apache.catalina.util.RequestUtil;
+import org.apache.catalina.util.StringManager;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -18,6 +15,7 @@ public class HttpProcessor {
     private HttpResponse response;
     private HttpRequestLine httpRequestLine=new HttpRequestLine();;
     private HttpHeader httpHeader;
+    protected StringManager sm =StringManager.getInstance("org.example.ex03.connector.http");
 
     public HttpProcessor(HttpConnector httpConnector) {
     }
@@ -110,10 +108,47 @@ public class HttpProcessor {
 
     private void parseHeaders(SocketInputStream input) throws IOException, ServletException {
         LinkedList<HttpHeader> httpHeaders=new LinkedList();
-        HttpHeader httpHeader=new HttpHeader();
-        while (input.readHeader(httpHeader)==1){
-            httpHeaders.add(httpHeader);
+        while (true){
             httpHeader=new HttpHeader();
+            input.readHeader(httpHeader);
+            if (httpHeader.getName().length()==0){
+                if (httpHeader.getName().length()==0)
+                    break;
+                else
+                    throw new ServletException(sm.getString("httpProcessor.parseHeaders.colon"));
+            }
+            String name=httpHeader.getName();
+            String value=httpHeader.getValue();
+            switch (name){
+                case "cookie":
+                    Cookie[] cookies= RequestUtil.parseCookieHeader(value);
+                    for (Cookie cookie:cookies){
+                        if (cookie.getName().equals("jseeeionid")){
+                            if (!request.isRequestedSessionIdFromCookie()){
+                                request.setRequestedSessionId(cookie.getValue());
+                                request.setRequestedSessionIdFromCookie(true);
+                                request.setRequestedSessionIdFromURL(false);
+                            }
+                        }
+                        request.addCookie(cookie);
+                    }
+                    break;
+                case "content-length":
+                    int n=-1;
+                    try {
+                        n=Integer.parseInt(value);
+                    }catch (Exception e){
+                        throw new ServletException(sm.getString("httpProcessor.parseHeaders.contentLength"));
+                    }
+                    request.setContentLength(n);
+                    break;
+                case "content-type":
+                    request.setContentType(value);
+                    break;
+                default:
+                    break;
+            }
+            httpHeaders.add(httpHeader);
         }
     }
 

@@ -1,6 +1,4 @@
-package org.example.ex03.http.request.message;
-
-import java.util.TreeMap;
+package org.example.ex03.connector.http;
 
 public class HttpHeader {
     private String name;

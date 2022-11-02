@@ -1,6 +1,4 @@
-package org.example.ex03.http.request;
-
-import org.example.ex03.http.SocketInputStream;
+package org.example.ex03.connector.http;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -21,6 +19,9 @@ public class HttpRequest implements HttpServletRequest {
     protected String method;
     protected String protocol;
     protected boolean requestedSessionIdFromURL;
+    protected int contentLength;
+    protected String contentType;
+    protected boolean requestedSessionIdFromCookie;
 
     public HttpRequest(SocketInputStream input) {
         this.input=input;
@@ -50,6 +51,26 @@ public class HttpRequest implements HttpServletRequest {
         this.protocol = protocol;
     }
 
+    public void setContentLength(int contentLength) {
+        this.contentLength = contentLength;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public void setRequestedSessionIdFromCookie(boolean requestedSessionIdFromCookie) {
+        this.requestedSessionIdFromCookie = requestedSessionIdFromCookie;
+    }
+
+    public void setCookies(ArrayList<Cookie> cookies) {
+        this.cookies = cookies;
+    }
+
+    public void addCookie(Cookie cookie){
+        this.cookies.add(cookie);
+    }
+
     @Override
     public String getAuthType() {
         return null;
@@ -57,7 +78,7 @@ public class HttpRequest implements HttpServletRequest {
 
     @Override
     public Cookie[] getCookies() {
-        return new Cookie[0];
+        return cookies.toArray(new Cookie[0]);
     }
 
     @Override
@@ -167,7 +188,7 @@ public class HttpRequest implements HttpServletRequest {
 
     @Override
     public boolean isRequestedSessionIdFromCookie() {
-        return false;
+        return requestedSessionIdFromCookie;
     }
 
     @Override
@@ -232,7 +253,7 @@ public class HttpRequest implements HttpServletRequest {
 
     @Override
     public int getContentLength() {
-        return 0;
+        return contentLength;
     }
 
     @Override
@@ -242,7 +263,7 @@ public class HttpRequest implements HttpServletRequest {
 
     @Override
     public String getContentType() {
-        return null;
+        return contentType;
     }
 
     @Override

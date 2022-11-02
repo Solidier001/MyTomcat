@@ -1,4 +1,4 @@
-package org.example.ex03;
+package org.apache.catalina.util;
 
 import java.util.Hashtable;
 
@@ -26,5 +26,9 @@ public class StringManager {
             managers.put(packageName,mgr);
         }
         return mgr;
+    }
+
+    public String getString(String name) {
+        return null;
     }
 }

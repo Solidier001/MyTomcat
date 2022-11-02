@@ -1,7 +1,4 @@
-package org.example.ex03.http;
-
-import org.example.ex03.http.request.message.HttpHeader;
-import org.example.ex03.http.request.message.HttpRequestLine;
+package org.example.ex03.connector.http;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,15 +34,11 @@ public class SocketInputStream {
         httpRequestLine.setUri(uri);
     }
 
-    public int readHeader(HttpHeader httpHeader) throws IOException {
-        String line=readLine();
-        if (!line.equals("")){
-            String[] header=line.split(":");
-            httpHeader.setName(header[0]);
-            httpHeader.setValue(header[1]);
-            return 1;
-        }
-        else return 0;
+    public void readHeader(HttpHeader httpHeader) throws IOException {
+        String line = readLine();
+        String[] header = line.split(":");
+        httpHeader.setName(header[0]);
+        httpHeader.setValue(header[1]);
     }
 
     public void close() throws IOException {

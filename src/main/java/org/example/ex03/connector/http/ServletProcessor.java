@@ -1,9 +1,6 @@
-package org.example.ex03.processsor.impl;
+package org.example.ex03.connector.http;
 
 import org.example.ex02.*;
-import org.example.ex03.http.request.HttpRequest;
-import org.example.ex03.http.response.HttpResponse;
-import org.example.ex03.processsor.Processer;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
