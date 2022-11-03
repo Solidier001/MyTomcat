@@ -1,6 +1,7 @@
 package org.apache.catalina.util;
 
 import javax.servlet.http.Cookie;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class RequestUtil {
@@ -31,5 +32,8 @@ public class RequestUtil {
 
         }
         return cookies.toArray(new Cookie[0]);
+    }
+
+    public static void parseParameters(ParameterMap result, String queryString, String encoding) throws UnsupportedEncodingException {
     }
 }

@@ -1,5 +1,8 @@
 package org.example.ex03.connector.http;
 
+import org.apache.catalina.util.ParameterMap;
+import org.apache.catalina.util.RequestUtil;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.BufferedReader;
@@ -22,6 +25,8 @@ public class HttpRequest implements HttpServletRequest {
     protected int contentLength;
     protected String contentType;
     protected boolean requestedSessionIdFromCookie;
+    protected ParameterMap parameters = null;
+    protected boolean parsed = false;
 
     public HttpRequest(SocketInputStream input) {
         this.input=input;
@@ -69,6 +74,52 @@ public class HttpRequest implements HttpServletRequest {
 
     public void addCookie(Cookie cookie){
         this.cookies.add(cookie);
+    }
+
+    protected void parseParameters(){
+        if (parsed)return;
+        ParameterMap result=parameters;
+        if (result==null)result=new ParameterMap();
+        result.setLocked(false);
+        String encoding=getCharacterEncoding();
+        if (encoding==null)
+            encoding="ISO-8859-1";
+        String queryString=getQueryString();
+        try{
+            RequestUtil.parseParameters(result,queryString,encoding);
+        }catch (UnsupportedEncodingException e){
+            ;
+        }
+        String contentType=getContentType();
+        if (contentType==null)contentType="";
+        int semicolon=contentType.indexOf(';');
+        if (semicolon>=0){
+            contentType=contentType.substring(0,semicolon).trim();
+        }
+        else contentType=contentType.trim();
+        if ("POST".equals(getMethod())&&contentLength>0&&"application/x-www-form-urlencoded".equals(contentType)){
+            try {
+                int max=getContentLength();
+                int len=0;
+                byte buf[]=new byte[getContentLength()];
+                ServletInputStream is=getInputStream();
+                while (len<max){
+                    int next=is.read(buf,len,max-len);
+                    if (next<0) break;
+                    len+=next;
+                }
+                is.close();
+                if (len<max)throw new RuntimeException("Content length encoding");
+                RequestUtil.parseParameters(result,new String(buf),encoding);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        result.setLocked(true);
+        parsed=true;
+        parameters=result;
     }
 
     @Override

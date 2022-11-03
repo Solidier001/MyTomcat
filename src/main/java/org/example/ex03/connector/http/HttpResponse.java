@@ -3,6 +3,8 @@ package org.example.ex03.connector.http;
 
 
 import org.example.ex02.Constants;
+import org.example.ex03.connector.ResponseStream;
+import org.example.ex03.connector.ResponseWriter;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -151,7 +153,11 @@ public class HttpResponse implements HttpServletResponse {
 
     @Override
     public PrintWriter getWriter() throws IOException {
-        return null;
+        ResponseStream newStream=new ResponseStream(this);
+        newStream.setCommit(false);
+        OutputStreamWriter osr=new OutputStreamWriter(newStream,getCharacterEncoding());
+        writer=new ResponseWriter(osr);
+        return writer;
     }
 
     @Override
