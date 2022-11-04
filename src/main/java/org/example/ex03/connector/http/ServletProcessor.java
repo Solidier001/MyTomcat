@@ -40,7 +40,9 @@ public class ServletProcessor implements Processer {
         try {
             System.out.println(myclass.getConstructor().newInstance() instanceof PrimitiveServlet);
             servlet= (Servlet) myclass.getConstructor().newInstance();
-            servlet.service((ServletRequest) request,(ServletResponse) response);
+            HttpRequestFacade requestFacade=new HttpRequestFacade(request);
+            HttpResponseFacade responseFacade=new HttpResponseFacade(response);
+            servlet.service(requestFacade,responseFacade);
         }  catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
