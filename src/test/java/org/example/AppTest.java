@@ -15,7 +15,12 @@ public class AppTest {
 
     @Test
     public void shouldAnswerWithTrue() throws IOException {
-        System.out.println(new StringBuffer().toString().split(":"));
+        String a="Host: localhost:8080";
+        int separator=a.indexOf(':');
+        String name=a.substring(0,separator);
+        String value=a.substring(separator+1);
+        System.out.println(name.trim());
+        System.out.println(value.trim());
     }
 
     private String readLine() throws IOException {

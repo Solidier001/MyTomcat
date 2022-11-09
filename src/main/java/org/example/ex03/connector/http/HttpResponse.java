@@ -156,7 +156,7 @@ public class HttpResponse implements HttpServletResponse {
         ResponseStream newStream=new ResponseStream(this);
         newStream.setCommit(false);
         OutputStreamWriter osr=new OutputStreamWriter(newStream,getCharacterEncoding());
-        writer=new ResponseWriter(osr);
+        writer=new ResponseWriter(osr,true);
         return writer;
     }
 

@@ -36,9 +36,18 @@ public class SocketInputStream {
 
     public void readHeader(HttpHeader httpHeader) throws IOException {
         String line = readLine();
-        String[] header = line.split(":");
-        httpHeader.setName(header[0]);
-        httpHeader.setValue(header[1]);
+        if (line.contains(":")) {
+            int separator = line.indexOf(':');
+            String name = line.substring(0, separator);
+            String value = line.substring(separator + 1);
+            httpHeader.setName(name.trim());
+            httpHeader.setValue(value.trim());
+        }
+        else {
+            httpHeader.setName("");
+            httpHeader.setValue("");
+        }
+
     }
 
     public void close() throws IOException {

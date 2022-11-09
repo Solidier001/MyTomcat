@@ -76,11 +76,10 @@ public class HttpProcessor {
             }
         }
 
-        String query=request.getQueryString();
         String match="&jsessionid=";
-        int semicolon=query.indexOf(match);
+        int semicolon=uri.indexOf(match);
         if (semicolon>=0){
-            String rest=query.substring(semicolon+match.length());
+            String rest=uri.substring(semicolon+match.length());
             int semicolon2=rest.indexOf('&');
             if (semicolon2>=0){
                 request.setRequestedSessionId(rest.substring(0,semicolon2));
@@ -91,7 +90,7 @@ public class HttpProcessor {
                 rest="";
             }
             request.setRequestedSessionIdFromURL(true);
-            query=query.substring(0,semicolon)+rest;
+            uri=uri.substring(0,semicolon)+rest;
         }
         else {
             request.setRequestedSessionId(null);
