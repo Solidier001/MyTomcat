@@ -7,11 +7,23 @@ import javax.servlet.WriteListener;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class ResponseStream extends OutputStream {
+public class ResponseStream extends ServletOutputStream {
     private HttpResponse httpResponse;
     private boolean commit;
+    private boolean ready=false;
+
 
     public ResponseStream() {
+    }
+
+    @Override
+    public boolean isReady() {
+        return ready;
+    }
+
+    @Override
+    public void setWriteListener(WriteListener writeListener) {
+
     }
 
     public ResponseStream(HttpResponse httpResponse) {
@@ -20,7 +32,8 @@ public class ResponseStream extends OutputStream {
 
     @Override
     public void write(int b) throws IOException {
-        httpResponse.getOutputStream().write(b);
+        OutputStream outputStream=httpResponse.getOutput();
+        outputStream.write(b);
     }
 
     public void setCommit(boolean commit) {

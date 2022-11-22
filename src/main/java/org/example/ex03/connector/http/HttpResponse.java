@@ -18,6 +18,7 @@ public class HttpResponse implements HttpServletResponse {
     protected OutputStream output;
     protected HttpRequest request;
     protected PrintWriter writer;
+    private String characterEncoding="UTF-8";
 
     public HttpResponse(OutputStream output) {
         this.output=output;
@@ -29,6 +30,10 @@ public class HttpResponse implements HttpServletResponse {
 
     public void setRequest(HttpRequest request) {
         this.request = request;
+    }
+
+    public OutputStream getOutput() {
+        return output;
     }
 
     @Override
@@ -138,7 +143,7 @@ public class HttpResponse implements HttpServletResponse {
 
     @Override
     public String getCharacterEncoding() {
-        return null;
+        return characterEncoding.toUpperCase(Locale.ROOT);
     }
 
     @Override
@@ -157,6 +162,7 @@ public class HttpResponse implements HttpServletResponse {
         newStream.setCommit(false);
         OutputStreamWriter osr=new OutputStreamWriter(newStream,getCharacterEncoding());
         writer=new ResponseWriter(osr,true);
+        writer.write("HTTP/1.1 200 OK\r\n\r\n");
         return writer;
     }
 
@@ -224,17 +230,24 @@ public class HttpResponse implements HttpServletResponse {
         byte[] bytes = new byte[BUFFER_SIZE];
         FileInputStream fis = null;
         try {
+            /* request.getUri has been replaced by request.getRequestURI */
             File file = new File(Constants.WEB_ROOT, request.getRequestURI());
             fis = new FileInputStream(file);
-            int ch = fis.read(bytes, 0, BUFFER_SIZE);
+      /*
+         HTTP Response = Status-Line
+           *(( general-header | response-header | entity-header ) CRLF)
+           CRLF
+           [ message-body ]
+         Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
+      */
             String message = "HTTP/1.1 200 OK\r\n" +
                     "\r\n";
             output.write(message.getBytes());
-            while (ch != -1) {
+            int ch = fis.read(bytes, 0, BUFFER_SIZE);
+            while (ch!=-1) {
                 output.write(bytes, 0, ch);
                 ch = fis.read(bytes, 0, BUFFER_SIZE);
             }
-            System.out.println("file found");
         } catch (FileNotFoundException e) {
             String errorMessage = "HTTP/1.1 404 File Not Found\r\n" +
                     "Content-Type: text/html\r\n" +

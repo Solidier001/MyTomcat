@@ -32,13 +32,12 @@ public class ServletProcessor implements Processer {
         }
         Class myclass=null;
         try {
-            myclass=loader.loadClass("org.example.ex02."+servletName);
+            myclass=loader.loadClass("org.example.ex03.servlets."+servletName);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         Servlet servlet=null;
         try {
-            System.out.println(myclass.getConstructor().newInstance() instanceof PrimitiveServlet);
             servlet= (Servlet) myclass.getConstructor().newInstance();
             HttpRequestFacade requestFacade=new HttpRequestFacade(request);
             HttpResponseFacade responseFacade=new HttpResponseFacade(response);

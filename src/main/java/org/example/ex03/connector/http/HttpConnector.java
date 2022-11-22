@@ -27,11 +27,12 @@ public class HttpConnector implements Runnable {
             Socket socket=null;
             try {
                 socket=serverSocket.accept();
+                HttpProcessor processor=new HttpProcessor(this);
+                processor.process(socket);
+                socket.close();
             } catch (IOException e) {
                 continue;
             }
-            HttpProcessor processor=new HttpProcessor(this);
-            processor.process(socket);
         }
     }
 

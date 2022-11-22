@@ -30,9 +30,9 @@ public class HttpProcessor {
             request=new HttpRequest(input);
             response=new HttpResponse(output);
             response.setRequest(request);
-            response.setHeader("Server","Pyrmont Servlet Container");
+//            response.setHeader("Server","Pyrmont Servlet Container");
             parseRequest(input,output);
-            parseHeaders(input);
+//            parseHeaders(input);
 
             if(request.getRequestURI().startsWith("/servlet/")){
                 ServletProcessor processor=new ServletProcessor();
@@ -46,6 +46,8 @@ public class HttpProcessor {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ServletException e) {
+            e.printStackTrace();
+        }catch (RuntimeException e) {
             e.printStackTrace();
         }
     }
